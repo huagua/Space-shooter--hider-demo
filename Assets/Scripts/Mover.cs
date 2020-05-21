@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 此脚本控制普通行人和被感染行人从上至下运动
 public class Mover : MonoBehaviour
 {
 	public float speed = 20f;
@@ -11,6 +12,4 @@ public class Mover : MonoBehaviour
     {
         GetComponent<Rigidbody>().velocity = transform.forward * speed;
     }
-
-    
 }

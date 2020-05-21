@@ -4,37 +4,40 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+// 整个场景控制脚本
 public class GameController : MonoBehaviour
 {
-	public Vector3 spawnValues;
+	public Vector3 spawnValues;           
 	// public GameObject[] hazards;
-    public GameObject originPeople;
+    public GameObject originPeople;     // 普通行人
     
     private int numPerWave = 15;
-    private float spawnWait = 0.8f;    //小行星间隔时间
+    private float spawnWait = 0.8f;    //普通行人间隔时间
     private float startWait = 1.5f;    // 初始等待时间
-    private float wavesWait = 3f;    //每波小行星等待时间
+    private float wavesWait = 3f;    //每波普通行人等待时间
 
-    public Text scoreText;
-    public Text gameOverText;
-    public Text finalScoreText;
-    public Text finalScore;
+    public Text scoreText;      //游戏场景中显示分数
+    public Text gameOverText;   //gameover时的显示文字
+    public Text finalScoreText;     // gameover时显示”score“
+    public Text finalScore;         // gameover时显示分数
 
-    public Button restartButton;
-    public Button menuButton;
-    public Button pauseButton;
-    public Button startButton;
+    public Button restartButton;    //重新游戏按钮
+    public Button menuButton;       //菜单按钮
+    public Button pauseButton;      //暂停按钮
+    public Button startButton;      //继续游戏按钮
 
-    public static int score;
+    public static int score;        //游戏时的分数
 
-    public bool gameOver;
+    public bool gameOver;           // 游戏结束标志
 
+    // 重新开始游戏方法
     public void RestartGame(string sceneName )
     {
         // SceneManager.LoadScene("SampleScene");
         SceneManager.LoadScene(sceneName);
     }
 
+    // 暂停游戏方法
     public void OnPauseGame()
     {
     	Time.timeScale = 0;
@@ -42,6 +45,7 @@ public class GameController : MonoBehaviour
     	pauseButton.gameObject.SetActive(false);
     }
 
+    // 继续游戏方法
     public void OnStartGame()
     {
     	Time.timeScale = 1;
@@ -55,19 +59,6 @@ public class GameController : MonoBehaviour
         Debug.Log("Let's get starting :");
         StartCoroutine(SpawnWaves());
         resetData();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // if(Random.value < 0.01 ) Spawn();
-        if(gameOver && Input.GetKeyDown(KeyCode.R))
-        {
-            // Application.LoadLevel(Application.loadedLevel); 已过时
-
-            SceneManager.LoadScene("SampleScene");
-        }
-
     }
 
     // resetData() 初始化数据
@@ -84,7 +75,7 @@ public class GameController : MonoBehaviour
         startButton.gameObject.SetActive(false);
     }
 
-    // SpawnWaves 批量产生小行星, 一批10个，循环产生
+    // SpawnWaves 批量产生普通行人, 一批15个，循环产生
     IEnumerator SpawnWaves() 
     {
         yield return new WaitForSeconds(startWait);
@@ -100,10 +91,9 @@ public class GameController : MonoBehaviour
         
     }
 
-    // Spawn 产生三种小行星中的任意一种
+    // Spawn 产生一个普通行人
     void Spawn()
     {
-    	// GameObject o = hazards[Random.Range(0, hazards.Length)];
     	Vector3 p = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
     	Quaternion q = Quaternion.identity;
     	Instantiate(originPeople, p, q);
@@ -129,6 +119,7 @@ public class GameController : MonoBehaviour
         SaveData();
     }
 
+    // 将历史最高分存储起来
     private void SaveData()
     {
         int tmp = PlayerPrefs.GetInt("maxScore");

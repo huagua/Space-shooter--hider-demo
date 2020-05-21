@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
             nextFire = Time.time + fireRate;
             Instantiate(bolt, spawnPos.position, spawnPos.rotation);
 
-            GetComponent<AudioSource>().PlayOneShot(fire);
+            GetComponent<AudioSource>().PlayOneShot(fire);  // 发射音效
         }
 
         // 不间断开火
@@ -47,58 +47,48 @@ public class PlayerController : MonoBehaviour
         // if (Input.GetButton ("Fire1") && Time.time > nextFire)
         // {
         //     nextFire = Time.time + fireRate;
-            
         //     Instantiate(bolt, spawnPos.position, spawnPos.rotation);
-            
         // }
     }
 
+    /*
+        Frame-rate independent MonoBehaviour.FixedUpdate message for physics calculations.
+        固定更新，不受帧率的变化影响，它是以固定的时间间隔来被调用。
+
+        一些物理属性的更新操作应该放在FxiedUpdate中操作，比如Force，Collider，Rigidbody等。
+        外设的操作也是，比如说键盘或者鼠标的输入输出Input，因为这样GameObject的物理表现的更平滑，更接近现实。
+
+        此处用作利用wasd键来控制player的上下左右移动
+    */
     void FixedUpdate()
     {
-        
-        // //单点触摸， 水平上下移动
-        // if (Input.touchCount ==1&& Input.GetTouch(0).phase == TouchPhase.Moved)
-        // {
-        //     // if (!GetComponent<EventSystem>().current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-        //     // if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-        //     var deltaposition = Input.GetTouch(0).deltaPosition;
-        //     transform.Translate(-deltaposition.x * 0.01f, 0f, -deltaposition.y * 0.1f);
-        //     r.position = new Vector3 (
-        //         Mathf.Clamp(r.position.x, bound.xMin, bound.xMax),
-        //         0,
-        //         Mathf.Clamp(r.position.z, bound.zMin, bound.zMax)
-        //     );
-            
-        // }else {
 
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
 
-            Vector3 move = new Vector3(h, 0f, v);
-            // rigidbody.velocity = speed*move;
-            // GetComponent<Rigidbody>().velocity = speed*move;
-            r.velocity = speed*move;
-            r.position = new Vector3 (
-                Mathf.Clamp(r.position.x, bound.xMin, bound.xMax),
-                -1,
-                Mathf.Clamp(r.position.z, bound.zMin, bound.zMax)
-                );
-        // }
+        Vector3 move = new Vector3(h, 0f, v);
+        r.velocity = speed*move;
+        r.position = new Vector3 (
+            Mathf.Clamp(r.position.x, bound.xMin, bound.xMax),
+            -1,
+            Mathf.Clamp(r.position.z, bound.zMin, bound.zMax)
+            );
     	
     }
 
+    /*
+        is called when the user has clicked on a GUIElement or Collider and is still holding down the mouse.
+        当鼠标拖拽GUI元素或者碰撞体时调用
+
+        此处用来鼠标拖拽player进行移动，或者移动端手指拖拽
+    */
     void OnMouseDrag()
     {
-        Debug.Log("mouse drag");
         Vector3 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         r.position = new Vector3 (
-                Mathf.Clamp(targetPos.x, bound.xMin, bound.xMax),
-                -1,
-                Mathf.Clamp(targetPos.z, bound.zMin, bound.zMax)
-                );
-        // targetPos.y = 0;
-        // targetPos.x = Mathf.Clamp(targetPos.x, bound.xMin, bound.xMax);
-        // targetPos.z = Mathf.Clamp(targetPos.z, bound.zMin, bound.zMax);
-        // transform.position = targetPos;
+            Mathf.Clamp(targetPos.x, bound.xMin, bound.xMax),
+            -1,
+            Mathf.Clamp(targetPos.z, bound.zMin, bound.zMax)
+            );
     }
 }

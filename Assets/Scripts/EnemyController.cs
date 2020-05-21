@@ -3,20 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-	敌机
-
-	1.随机左右移动（仅改变x的值）
-		移动规则：
-		- 给定移动范围		✅
-		- 给定移动时间间隔 ✅
-		- 任意左移或右移	✅
-		- 移动速度任意		✅
-		- 若是超过范围，则只能到达边缘
-		- 若是当前已在边缘位置，则下次只能左移或右移
-
-	2.发射子弹
-
-
+    敌机控制脚本
 */
 public class EnemyController : MonoBehaviour
 {
@@ -32,9 +19,6 @@ public class EnemyController : MonoBehaviour
     private float fireRate = 0.5f; // 发射时间间隔
     private float nextFire; // 下次发射时间
 
-    // private float nextPos = 0.1f;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -42,7 +26,7 @@ public class EnemyController : MonoBehaviour
     	StartCoroutine(moveEnemy());
     }
 
-    // Update is called once per frame
+    // Update is called once per frame 每一帧都会调用
     void Update()
     {
     	// 间断开火
@@ -54,8 +38,7 @@ public class EnemyController : MonoBehaviour
     	
     }
 
-
-
+    // 固定时间移动敌机
     IEnumerator moveEnemy()
     {
         yield return new WaitForSeconds(timeWait);
@@ -66,9 +49,10 @@ public class EnemyController : MonoBehaviour
     	}
     }
 
+    // 左右移动敌机
     void moveLeftOrRight()
     {
-
+        // 首先判定敌机是否在左右边界，如果在边界则需要调转方向
     	if (r.position.x == bound.xMin)
     	{
     		speed = 0.1f;
@@ -76,11 +60,11 @@ public class EnemyController : MonoBehaviour
     	{
     		speed = -0.1f;
     	}
-    	// speed = Random.Range(-2, 2);
     	
-    	r.MovePosition(GetComponent<Transform>().position+Vector3.right*speed);
+        // 每次移动的距离是speed = 0.1f
+    	r.MovePosition(r.position+Vector3.right*speed);
     	r.position = new Vector3 (
-    		Mathf.Clamp(r.position.x, bound.xMin, bound.xMax),
+    		Mathf.Clamp(r.position.x, bound.xMin, bound.xMax), // 控制边界
     		-1,
     		19
     		);
