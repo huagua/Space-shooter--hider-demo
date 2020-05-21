@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
     public Button restartButton;    //重新游戏按钮
     public Button menuButton;       //菜单按钮
     public Button pauseButton;      //暂停按钮
-    public Button startButton;      //继续游戏按钮
+    public Button continueButton;      //继续游戏按钮
 
     public static int score;        //游戏时的分数
 
@@ -34,6 +34,7 @@ public class GameController : MonoBehaviour
     public void RestartGame(string sceneName )
     {
         // SceneManager.LoadScene("SampleScene");
+
         SceneManager.LoadScene(sceneName);
     }
 
@@ -41,21 +42,26 @@ public class GameController : MonoBehaviour
     public void OnPauseGame()
     {
     	Time.timeScale = 0;
-    	startButton.gameObject.SetActive(true);
+    	continueButton.gameObject.SetActive(true);
+        restartButton.gameObject.SetActive(true);
+        menuButton.gameObject.SetActive(true);
     	pauseButton.gameObject.SetActive(false);
     }
 
     // 继续游戏方法
-    public void OnStartGame()
+    public void OnContinueGame()
     {
     	Time.timeScale = 1;
-    	startButton.gameObject.SetActive(false);
+    	continueButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
+        menuButton.gameObject.SetActive(false);
     	pauseButton.gameObject.SetActive(true);
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        if(Time.timeScale == 0) Time.timeScale = 1;
         Debug.Log("Let's get starting :");
         StartCoroutine(SpawnWaves());
         resetData();
@@ -72,7 +78,7 @@ public class GameController : MonoBehaviour
         gameOver = false;
         restartButton.gameObject.SetActive(false);
         menuButton.gameObject.SetActive(false);
-        startButton.gameObject.SetActive(false);
+        continueButton.gameObject.SetActive(false);
     }
 
     // SpawnWaves 批量产生普通行人, 一批15个，循环产生
